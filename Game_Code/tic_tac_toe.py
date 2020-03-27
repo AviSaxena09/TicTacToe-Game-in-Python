@@ -53,15 +53,65 @@ class TicTacToe:
             return 1
         return 0
 
-    @staticmethod
-    def gen_no():
+    def gen_no(self):
         """
         Static method to generate Random Number for CPU choice
         :return:
         """
-        x = random.randint(0, 3)
-        y = random.randint(0, 3)
-        return x, y
+        #x,y = TicTacToe.gen_random_no()
+        #print(x," ",y)
+        max_fill = 0
+        symbol = 'O'
+        for i in range(0, 3):
+            if self.board[i].count(symbol) > max_fill:
+                try:
+                    x = i + 1
+                    y = self.board[i].index(' ') +1
+                    max_fill = self.board[i].count(symbol)
+                    print(max_fill, "    ",x," ",y)
+                except:
+                    continue
+        for j in range(0, 3):
+            if [self.board[0][j], self.board[1][j], self.board[2][j]].count(symbol)>max_fill:
+                try:
+                    x = i+1
+                    y = self.board[i].index(' ')+1
+                    max_fill = [self.board[0][j], self.board[1][j], self.board[2][j]].count(symbol)
+                    print(max_fill, "    ",x," ",y)
+                except:
+                    continue
+        if [self.board[0][0], self.board[1][1], self.board[2][2]].count(symbol) > max_fill:
+            try:
+                x = y = self.board[i].index(' ') + 1
+                max_fill = [self.board[0][j], self.board[1][j], self.board[2][j]].count(symbol)
+                print(max_fill, "    ", x, " ", y)
+            except:
+                pass
+        if [self.board[0][2], self.board[1][1], self.board[2][0]].count(symbol) > max_fill:
+            try:
+                x = y = self.board[i].index(' ') + 1
+                max_fill = [self.board[0][j], self.board[1][j], self.board[2][j]].count(symbol)
+                print(max_fill, "    ", x, " ", y)
+            except:
+                pass
+        if max_fill==0:
+            return self.gen_random_no()
+        else:
+            return x, y
+
+    def gen_random_no(self):
+        """
+        Static method to generate Random Number for CPU choice
+        :return:
+        """
+        avai_index = list()
+        for i in [0, 1, 2]:
+            for j in [0, 1, 2]:
+                if self.board[i][j] == ' ':
+                    avai_index.append([i, j])
+        indx = random.randint(0, len(avai_index)-1)
+        print(avai_index[indx][0], " ",avai_index[indx][1])
+        return avai_index[indx][0], avai_index[indx][1]
 
     def is_full(self):
         """
@@ -83,14 +133,15 @@ class TicTacToe:
         Function to mark CPU choice in board
         :return:
         """
-        x, y = TicTacToe.gen_no()
-        if self.board[x - 1][y - 1] == ' ':
-            self.board[x - 1][y - 1] = 'O'
-            return
+        if self.is_full() == 0:
+            x, y = self.gen_no()
+            if self.board[x - 1][y - 1] == ' ':
+                self.board[x - 1][y - 1] = 'O'
+                return
+            else:
+                self.mark_comp_choice()
         else:
-            if self.is_full():
-                return "Game Over"
-            self.mark_comp_choice()
+            return "Game Over"
 
     def print_board(self):
         """
