@@ -1,5 +1,5 @@
 # TicTacToe_python
-<b>TicTacToe Game</b>
+<b>TicTacToe Game in Python</b>
 
 The Project Contains code for implementation of TicTacToe Game, the player in the game is able to Enter his choices to mark and play the game.<br>
 The code is implemented completely in PYTHON 3, the code is well commented for understanding<br>
