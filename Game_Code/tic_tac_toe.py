@@ -1,12 +1,12 @@
 """File Contains Class with functions to implement Player Enviroment"""
-# pylint: disable-msg = C0103, R1705, R1710
+# pylint: disable-msg = W0702, C0103, R1705, R1710
 import random
 
 
 class TicTacToe:
     """Functions with Startgame() to start game and set Enviroment"""
 
-    def __init__(self, name):
+    def __init__(self, name, level):
         """
         Initialize Board and Name
         :param name:
@@ -15,6 +15,7 @@ class TicTacToe:
                       [' ', ' ', ' '],
                       [' ', ' ', ' ']]
         self.name = name
+        self.level = level
 
     def mark_choice(self):
         """
@@ -30,11 +31,11 @@ class TicTacToe:
             return
         if self.board[x - 1][y - 1] == ' ':
             self.board[x - 1][y - 1] = 'X'
-            return
         else:
             print("Already Selected  !!")
             self.mark_choice()
             return
+        return
 
     def check_win(self, symbol):
         """
@@ -53,13 +54,11 @@ class TicTacToe:
             return 1
         return 0
 
-    def gen_no(self):
+    def gen_no_tough(self):
         """
-        Static method to generate Random Number for CPU choice
+        Static method to generate Number for CPU choice as per the Algorithm
         :return:
         """
-        #x,y = TicTacToe.gen_random_no()
-        #print(x," ",y)
         max_fill = 0
         symbol = 'O'
         for i in range(0, 3):
@@ -68,33 +67,29 @@ class TicTacToe:
                     x = i + 1
                     y = self.board[i].index(' ') +1
                     max_fill = self.board[i].count(symbol)
-                    print(max_fill, "    ",x," ",y)
                 except:
                     continue
         for j in range(0, 3):
-            if [self.board[0][j], self.board[1][j], self.board[2][j]].count(symbol)>max_fill:
+            if [self.board[0][j], self.board[1][j], self.board[2][j]].count(symbol) > max_fill:
                 try:
                     x = i+1
                     y = self.board[i].index(' ')+1
                     max_fill = [self.board[0][j], self.board[1][j], self.board[2][j]].count(symbol)
-                    print(max_fill, "    ",x," ",y)
                 except:
                     continue
         if [self.board[0][0], self.board[1][1], self.board[2][2]].count(symbol) > max_fill:
             try:
                 x = y = self.board[i].index(' ') + 1
                 max_fill = [self.board[0][j], self.board[1][j], self.board[2][j]].count(symbol)
-                print(max_fill, "    ", x, " ", y)
             except:
                 pass
         if [self.board[0][2], self.board[1][1], self.board[2][0]].count(symbol) > max_fill:
             try:
                 x = y = self.board[i].index(' ') + 1
                 max_fill = [self.board[0][j], self.board[1][j], self.board[2][j]].count(symbol)
-                print(max_fill, "    ", x, " ", y)
             except:
                 pass
-        if max_fill==0:
+        if max_fill == 0:
             return self.gen_random_no()
         else:
             return x, y
@@ -110,7 +105,6 @@ class TicTacToe:
                 if self.board[i][j] == ' ':
                     avai_index.append([i, j])
         indx = random.randint(0, len(avai_index)-1)
-        print(avai_index[indx][0], " ",avai_index[indx][1])
         return avai_index[indx][0], avai_index[indx][1]
 
     def is_full(self):
@@ -128,20 +122,29 @@ class TicTacToe:
         else:
             return 0
 
-    def mark_comp_choice(self):
+    def mark_comp_choice(self, itr=0):
         """
         Function to mark CPU choice in board
+        :param itr:
         :return:
         """
         if self.is_full() == 0:
-            x, y = self.gen_no()
+            if self.level == 1:
+                x, y = self.gen_random_no()
+            else:
+                x, y = self.gen_no_tough()
             if self.board[x - 1][y - 1] == ' ':
                 self.board[x - 1][y - 1] = 'O'
-                return
             else:
-                self.mark_comp_choice()
+                if itr <= 1:
+                    itr += 1
+                    self.mark_comp_choice(itr)
+                    return
+                else:
+                    return "Unexpected Error"
         else:
             return "Game Over"
+        return
 
     def print_board(self):
         """
@@ -164,7 +167,8 @@ class TicTacToe:
         """
         print("-----------Welcome To The Game-----------\n")
         name = input("Enter Player Name : ")
-        play = TicTacToe(name)
+        level = int(input("Enter Level Easy/Tough (1/2) : "))
+        play = TicTacToe(name, level)
         print("Player 1 (X) : " + play.name + "\nPlayer 2 (O) : Computer")
         win = 0
         while win == 0:
@@ -186,5 +190,5 @@ class TicTacToe:
             print("Hey " + play.name + " You Lost !!!")
 
 
-if __name__== "__main__":
+if __name__ == "__main__":
     TicTacToe.start_game()
