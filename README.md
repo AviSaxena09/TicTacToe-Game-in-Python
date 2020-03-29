@@ -12,4 +12,4 @@ Implemented Algorithm to generate the choices for CPU in optimized way to make t
 <b>Third Commit</b><br>
 Optimization of current Algorithms.
 <br>
-Next version includes inplementation of Player Vs Player
+Next version includes implementation of Player Vs Player
